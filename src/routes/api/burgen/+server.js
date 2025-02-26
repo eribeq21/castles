@@ -12,7 +12,7 @@ export async function GET({ params }) {
     });
 }
 
-//  The POST request
+//  The POST requestgit 
 export async function POST({ request }) {
     const data = await request.json(); 
     const connection = await createConnection();
