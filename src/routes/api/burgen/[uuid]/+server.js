@@ -80,7 +80,6 @@ export async function PUT({ params, request }) {
             [uuid]
         );
 
-        await connection.end();
 
         return new Response(JSON.stringify(updatedCastle[0]), {
             status: 200,
@@ -106,7 +105,6 @@ export async function DELETE({ params, request }) {
             [uuid]
         );
 
-        await connection.end();
 
         if (result.affectedRows === 0) {
             return new Response(JSON.stringify({ error: 'Castle not found' }), { status: 404 });
