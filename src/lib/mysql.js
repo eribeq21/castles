@@ -1,4 +1,11 @@
-import { createConnection } from "mysql2/promise"
+import mysql from 'mysql2/promise';
+import {
+	DB_HOST, 
+	DB_USER, 
+	DB_PORT, 
+	DB_PASSWORD, 
+	DB_NAME
+} from '$env/static/private';
 
 let connection = null;
 export function createConnection() {
