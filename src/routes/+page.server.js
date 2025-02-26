@@ -7,4 +7,4 @@ export async function load({ locals }) {
 	return {
 		castles: rows
 	};
-}
+} 

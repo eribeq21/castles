@@ -1,5 +1,7 @@
 import { promises as fs } from 'fs';
 import { createConnection } from '$lib/mysql.js';
+import { BASIC_AUTH_USER, BASIC_AUTH_PASSWORD } from '$env/static/private';
+
 
 // The GET request
 export async function GET({ params }) {
@@ -12,8 +14,36 @@ export async function GET({ params }) {
     });
 }
 
+// authenticate function
+async function authenticate(request) {
+    const auth = request.headers.get('authorization');
+    if (!auth) {
+        return new Response(null, {
+            status: 401,
+            headers: { 'www-authenticate': 'Basic realm="Restaurants API"' }
+        });
+    }
+ 
+    const base64Credentials = auth.split(' ')[1];
+    const credentials = atob(base64Credentials);
+    const [username, password] = credentials.split(':');
+ 
+    if (username !== BASIC_AUTH_USER || password !== BASIC_AUTH_PASSWORD) {
+        return new Response(JSON.stringify({ message: 'Access denied' }), {
+            status: 401,
+            headers: { 'www-authenticate': 'Basic realm="Restaurants API"' }
+        });
+    }
+ 
+    return null;
+}
+
 //  The POST requestgit 
 export async function POST({ request }) {
+    const authresponse = await authenticate(request);
+
+    if(authresponse) return authresponse;
+
     const data = await request.json(); 
     const connection = await createConnection();
 
